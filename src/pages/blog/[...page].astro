@@ -5,13 +5,17 @@ import BaseLayout from "@layouts/Layout.astro";
 
 // Assuming this is the structure of your articles, replace 'any' with actual types
 interface Article {
-  slug: string;
-  imageUrl: string;
-  publishedDate: string;
-  readTime: string;
-  category: string;
-  title: string;
-  summary: string;
+  id: string;
+    title: string;
+    summary: string;
+    publishedDate: string;
+    readTime: string;
+    category: string;
+    imageUrl: string;
+    articleUrl: string;
+    slug: string;
+    authorPhoto:string;
+    authorName:string;
 }
 
 // Define a type for the 'paginate' function
@@ -42,8 +46,8 @@ export async function getStaticPaths({ paginate }: ComponentProps) {
 
 const { page, entry } = Astro.props as ComponentProps; 
 ---
-<BaseLayout   title={entry.title}
-description={entry.summary}>
+<BaseLayout title={entry?.title || 'Default Title'} description={entry?.summary || 'Default Description'}>
+
     <section
         class="grid px-5 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-3 md:[&>*:first-child]:col-span-2"
       >
