@@ -3,11 +3,44 @@ import { Image } from "astro:assets";
 import { latestArticlesData } from "./generateBlog";
 import BaseLayout from "@layouts/Layout.astro";
 
-export async function getStaticPaths({ paginate }) {
+// Assuming this is the structure of your articles, replace 'any' with actual types
+interface Article {
+  slug: string;
+  imageUrl: string;
+  publishedDate: string;
+  readTime: string;
+  category: string;
+  title: string;
+  summary: string;
+}
+
+// Define a type for the 'paginate' function
+type PaginateFunction = (articles: Article[], config: { pageSize: number }) => any;
+
+// Define a type for the 'page' prop
+interface Page {
+  data: Article[];
+  url: {
+    prev?: string;
+    next?: string;
+  };
+}
+
+// Define a type for the component props
+interface ComponentProps {
+  paginate: PaginateFunction;
+  page: Page;
+  entry: {
+    title: string;
+    summary: string;
+  };
+}
+
+export async function getStaticPaths({ paginate }: ComponentProps) {
   return paginate(latestArticlesData.latestArticles, { pageSize: 8 });
 }
 
-const { page } = Astro.props; 
+const { page, entry } = Astro.props as ComponentProps; 
 ---
 <BaseLayout   title={entry.title}
 description={entry.summary}>
@@ -16,7 +49,7 @@ description={entry.summary}>
       >
 
 {
-    page.data.map((article, index) => (
+    page.data.map((article) => (
       <article class="grid grid-rows-[300px_auto] md:grid-rows-[300px_220px] min-h-full group">
         <a
           class="relative decoration-none effect overflow-hidden"
