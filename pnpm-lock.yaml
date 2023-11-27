@@ -34,6 +34,9 @@ devDependencies:
   '@faker-js/faker':
     specifier: ^8.2.0
     version: 8.2.0
+  '@iconify-json/fluent-emoji':
+    specifier: ^1.1.15
+    version: 1.1.15
   '@iconify-json/tabler':
     specifier: ^1.1.96
     version: 1.1.96
@@ -806,6 +809,12 @@ packages:
   /@faker-js/faker@8.2.0:
     resolution: {integrity: sha512-VacmzZqVxdWdf9y64lDOMZNDMM/FQdtM9IsaOPKOm2suYwEatb8VkdHqOzXcDnZbk7YDE2BmsJmy/2Hmkn563g==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0, npm: '>=6.14.13'}
+    dev: true
+
+  /@iconify-json/fluent-emoji@1.1.15:
+    resolution: {integrity: sha512-C0HajGHrQpLsI7P8/C113xuV8vr8QTD8RG50SuEEG7OMRRA1TkuR+s5lJTuvq/9//yrzI9HMIO5dodh/hKo2sA==}
+    dependencies:
+      '@iconify/types': 2.0.0
     dev: true
 
   /@iconify-json/tabler@1.1.96:

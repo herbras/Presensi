@@ -1,0 +1,140 @@
+<script>
+	
+    // Fungsi utama yang berisi seluruh kode
+    const mainFunction = () => {
+        window.addEventListener("scroll", function () {
+      const footerElement = document.getElementById("footer-section");
+      const whatsappButton = document.getElementById("whatsapp-buttons");
+    
+      // Cek apakah footerElement ada
+      if (!footerElement || !whatsappButton) return;
+    
+      const footerTop = footerElement.offsetTop;
+      const footerHeight = footerElement.offsetHeight;
+      const halfFooter = footerTop + footerHeight / 2; // Setengah jalan ke footer
+    
+      const currentScroll = window.scrollY;
+      const windowHeight = window.innerHeight;
+    
+      let inHeroSection = false;
+      const Hero = document.getElementById("Hero-section");
+      
+      // Cek apakah Hero ada, dan tetapkan inHeroSection sesuai kondisi
+      if (Hero) {
+        const HeroTop = Hero.offsetTop;
+        const HeroBottom = HeroTop + Hero.offsetHeight;
+        inHeroSection = currentScroll + windowHeight > HeroTop && currentScroll < HeroBottom;
+      }
+    
+      // Jika di dalam Hero-section atau setengah jalan ke footer, sembunyikan tombol
+      if (inHeroSection || currentScroll + windowHeight >= halfFooter) {
+        whatsappButton.style.opacity = "0";
+        whatsappButton.style.visibility = "hidden";
+        whatsappButton.classList.remove("bottom-8");
+      } else {
+        // Jika tidak, tampilkan tombol
+        whatsappButton.style.opacity = "1";
+        whatsappButton.style.visibility = "visible";
+        whatsappButton.classList.add("bottom-8");
+      }
+    });
+    
+    
+    
+    const attachEvent = (selector, event, fn) => {
+        const matches = document.querySelectorAll(selector);
+        if (matches && matches.length) {
+            matches.forEach((elem) => {
+                elem.addEventListener(event, () => fn(elem), false);
+            });
+        }
+    };
+    
+    const resetPage = () => {
+        const elem = document.querySelector("[data-aw-toggle-menu]");
+        if (elem) {
+            elem.classList.remove("expanded");
+        }
+        document.querySelector("#header nav")?.classList.add("hidden");
+    };
+    
+    const initializePage = () => {
+    
+    
+        const elem = document.querySelector("[data-aw-toggle-menu]");
+        if (elem) {
+            elem.classList.remove("expanded");
+            document.querySelector("#header nav")?.classList.add("hidden");
+        }
+    };
+    
+    let isMenuExpanded = false;
+    
+    const closeMenu = () => {
+        const elem = document.querySelector("[data-aw-toggle-menu]");
+        if (elem && elem.classList.contains("expanded")) {
+            elem.classList.remove("expanded");
+            document.querySelector("#header nav")?.classList.add("hidden");
+            localStorage.menuExpanded = false;
+            isMenuExpanded = false;
+        }
+    };
+    
+    document.addEventListener("click", (event) => {
+        const isInsideHeader = event.target.closest("#header");
+        if (!isInsideHeader) {
+            closeMenu();
+        }
+    });
+    
+    let isScrollStarted = false;
+    let lastScrollPosition = 0;
+    const navbar = document.getElementById("header");
+    
+    document.addEventListener("mousedown", () => {
+        isScrollStarted = true;
+    });
+    
+    window.addEventListener("scroll", () => {
+        const newScrollPosition = window.scrollY;
+        if (newScrollPosition <= lastScrollPosition) {
+            navbar.style.transform = "translateY(0)";
+        } else {
+            navbar.style.transform = "translateY(-100%)";
+        }
+    
+        if (newScrollPosition !== lastScrollPosition && isMenuExpanded && isScrollStarted) {
+            closeMenu();
+            isScrollStarted = false;
+        }
+    
+        lastScrollPosition = newScrollPosition;
+    });
+    
+    window.onpageshow = resetPage;
+    
+    const handlePageInteractions = () => {
+        attachEvent("[data-aw-toggle-menu]", "click", function (elem) {
+            elem.classList.toggle("expanded");
+            document.querySelector("#header nav")?.classList.toggle("hidden");
+            isMenuExpanded = elem.classList.contains("expanded");
+            localStorage.menuExpanded = isMenuExpanded;
+        });
+    
+    };
+    
+    // Panggil fungsi yang perlu dijalankan saat halaman dimuat atau setelah astro:after-swap
+    initializePage();
+    handlePageInteractions();
+    };
+    
+    document.addEventListener("DOMContentLoaded", () => {
+    mainFunction();
+    });
+    
+    document.addEventListener("astro:after-swap", () => {
+    mainFunction();
+    });
+    
+    </script>
+    
